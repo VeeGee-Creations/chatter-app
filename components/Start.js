@@ -5,21 +5,21 @@ export default class Start extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
+            user: '',
             background: '',
         };
     }
 
     render() {
         const { navigation } = this.props;
-        const { username, background } = this.state;
+        const { user, background } = this.state;
         const colors = ['#090C08', '#474056', '#8A95A5', '#B9C6AE']
 
         // Verify username and color selected 
-        const signInCheck = () => username.length > 0 && background.length > 0;
+        const signInCheck = () => user.length > 0 && background.length > 0;
 
         // Navigate to chat and pass props
-        const startChat = () => navigation.navigate('Chat', { username, background});
+        const startChat = () => navigation.navigate('Chat', { user, background});
 
         return (
             <View style={styles.container}>
@@ -41,8 +41,8 @@ export default class Start extends React.Component {
                         <View style={[styles.signInCenterContainer, styles.signInContainers]}>
                             <TextInput
                                 style={styles.textInput}
-                                value={username}
-                                onChangeText={(username) => this.setState({username})}
+                                value={user}
+                                onChangeText={(user) => this.setState({user})}
                                 placeholder={'Your Name'}
                                 placeholderTextColor={'#75708350'}
                             />
