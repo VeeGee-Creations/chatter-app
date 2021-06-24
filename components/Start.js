@@ -13,7 +13,6 @@ export default class Start extends React.Component {
     render() {
         const { navigation } = this.props;
         const { user, background } = this.state;
-        const colors = ['#090C08', '#474056', '#8A95A5', '#B9C6AE']
 
         // Verify username and color selected 
         const signInCheck = () => user.length > 0 && background.length > 0;
@@ -60,47 +59,47 @@ export default class Start extends React.Component {
                                 Choose Background Color
                             </Text>
                             <View style={styles.colorContainer} accessibilityRole="radiogroup">
-                                <View style={[styles.chooseColor, styles.colorChoice, background === colors[0] ? styles.selected: null]} accessible={false}>
+                                <View style={[styles.chooseColor, styles.colorChoice, background === styles.color1.backgroundColor ? styles.selected: null]} accessible={false}>
                                     <TouchableOpacity
                                         accessible={true}
                                         accessibilityLabel="Black"
                                         accessibilityHint="Let's you choose a black background"
                                         accessibilityRole="radio"
                                         activeOpacity={1}
-                                        onPress={() => this.setState({background: colors[0]})}
+                                        onPress={() => this.setState({background: styles.color1.backgroundColor})}
                                         style={[styles.colorTouch, styles.color1]}
                                     />
                                 </View>
-                                <View style={[styles.chooseColor, styles.colorChoice, background === colors[1] ? styles.selected: null]} accessible={false}>
+                                <View style={[styles.chooseColor, styles.colorChoice, background === styles.color2.backgroundColor ? styles.selected: null]} accessible={false}>
                                     <TouchableOpacity
                                         accessible={true}
                                         accessibilityLabel="Purple"
                                         accessibilityHint="Let's you choose a purple background"
                                         accessibilityRole="radio"
                                         activeOpacity={1}
-                                        onPress={() => this.setState({background: colors[1]})}
+                                        onPress={() => this.setState({background: styles.color2.backgroundColor})}
                                         style={[styles.colorTouch, styles.color2]}
                                     />
                                 </View>
-                                <View style={[styles.chooseColor, styles.colorChoice, background === colors[2] ? styles.selected: null]} accessible={false}>
+                                <View style={[styles.chooseColor, styles.colorChoice, background === styles.color3.backgroundColor ? styles.selected: null]} accessible={false}>
                                     <TouchableOpacity
                                         accessible={true}
                                         accessibilityLabel="Blue"
                                         accessibilityHint="Let's you choose a blue background"
                                         accessibilityRole="radio"
                                         activeOpacity={1}
-                                        onPress={() => this.setState({background: colors[2]})}
+                                        onPress={() => this.setState({background: styles.color3.backgroundColor})}
                                         style={[styles.colorTouch, styles.color3]}
                                     />
                                 </View>
-                                <View style={[styles.chooseColor, styles.colorChoice, background === colors[3] ? styles.selected: null]} accessible={false}>
+                                <View style={[styles.chooseColor, styles.colorChoice, background === styles.color4.backgroundColor ? styles.selected: null]} accessible={false}>
                                     <TouchableOpacity
                                         accessible={true}
                                         accessibilityLabel="Green"
                                         accessibilityHint="Let's you choose a green background"
                                         accessibilityRole="radio"
                                         activeOpacity={1}
-                                        onPress={() => this.setState({background: colors[3]})}
+                                        onPress={() => this.setState({background: styles.color4.backgroundColor})}
                                         style={[styles.colorTouch, styles.color4]}
                                     />
                                 </View>
