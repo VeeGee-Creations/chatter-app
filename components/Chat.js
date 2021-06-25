@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Platform, KeyboardAvoidingView, LogBox } from 'react-native';
-import { GiftedChat, Bubble, SystemMessage, Day, Time } from 'react-native-gifted-chat';
+import { StyleSheet, View, Platform, KeyboardAvoidingView, LogBox, AsyncStorage } from 'react-native';
+import { GiftedChat, Bubble, SystemMessage, Day, Time, InputToolbar } from 'react-native-gifted-chat';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import { v4 as uuid } from 'uuid';
+import NetInfo from '@react-native-community/netinfo';
 
 
 export default function Chat(props) {
     const [messages, setMessages] = useState([]);
     const [uid, setUid] = useState('');
+    const [connectStat, setConnectStat] = useState(false);
     
     const { background, user } = props.route.params;
     const { navigation } = props;
@@ -34,6 +37,21 @@ export default function Chat(props) {
         // display username in title
         navigation.setOptions({ title: user});
 
+        // get messages from firestore if online
+        checkConnection();
+
+        //get messages from local storage
+        const getMessages = async () => {
+            let messages;
+            try {
+                messages = await AsyncStorage.getItem('messages') || [];
+                setMessages(JSON.parse(messages));
+            } catch(error) {
+                console.error(error.message);
+            }
+        };
+        if(connectStat === false ) getMessages();
+
         const authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
             // anon signin
             if (!user) {
@@ -51,7 +69,7 @@ export default function Chat(props) {
 
         // announce arrival
         referenceChatMessages.add({
-            _id: new Date(),
+            _id: uuid(),
             text: `${user} has entered chat.`,
             createdAt: new Date(),
             system: true,
@@ -66,7 +84,7 @@ export default function Chat(props) {
         return () => {
             // announce departure
             referenceChatMessages.add({
-                _id: new Date(),
+                _id: uuid(),
                 text: `${user} has left chat.`,
                 createdAt: new Date(),
                 system: true,
@@ -75,6 +93,33 @@ export default function Chat(props) {
             unsubscribe();
         }
     }, []);
+
+    //check connection status
+    const checkConnection = () => {
+        NetInfo.fetch().then(connection => {
+            setConnectStat(connection.isConnected);
+        });
+    };
+
+    //get messages from local storage
+    const getMessages = async () => {
+        let messages;
+        try {
+            messages = await AsyncStorage.getItem('messages') || [];
+            setMessages(JSON.parse(messages));
+        } catch(error) {
+            console.error(error.message);
+        }
+    };
+
+    //save messages to local storage
+    const saveMessages = async (messages) => {
+        try {
+            await AsyncStorage.setItem('messages', JSON.stringify(messages));
+        } catch(error) {
+            console.error(error.message);
+        }
+    };
 
     const onCollectionUpdate = (querySnapshot) => {
         const messages = [];
@@ -104,7 +149,8 @@ export default function Chat(props) {
                 });
             }
         });
-        setMessages(messages);
+        saveMessages(messages);
+        getMessages();
     }
 
     // update messeges on send
@@ -180,6 +226,13 @@ export default function Chat(props) {
         );
     };
 
+    // only render toolbar if online
+    const renderInputToolbar = (props) => {
+        if (connectStat === false) return;
+
+        return(<InputToolbar {...props} />);
+    }
+
         return (
             <View style={[styles.container, {backgroundColor: background}]}>
                 <GiftedChat
@@ -187,6 +240,7 @@ export default function Chat(props) {
                     renderSystemMessage={renderSystemMessage}
                     renderDay={renderDay}
                     renderTime={renderTime}
+                    renderInputToolbar={renderInputToolbar}
                     messages={messages}
                     onSend={(messages) => onSend(messages)}
                     user={{
