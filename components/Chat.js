@@ -6,6 +6,8 @@ import 'firebase/firestore';
 import { v4 as uuid } from 'uuid';
 import NetInfo from '@react-native-community/netinfo';
 
+import MapView from 'react-native-maps';
+import CustomActions from './CustomActions';
 
 export default function Chat(props) {
     const [messages, setMessages] = useState([]);
@@ -129,6 +131,7 @@ export default function Chat(props) {
             let data = doc.data();
 
             // push system messages
+            
             if(data.system){
                 messages.push({
                     _id: data._id,
@@ -146,6 +149,8 @@ export default function Chat(props) {
                         name: data.user.name,
                         avatar: data.user.avatar
                     },
+                    location: data.location || null,
+                    image: data.image || null
                 });
             }
         });
@@ -226,6 +231,35 @@ export default function Chat(props) {
         );
     };
 
+    // render actions button
+    const renderCustomActions = (props) => {
+        return <CustomActions {...props} />;
+    };
+
+    //render map location
+    const renderCustomView = (props) => {
+        const { currentMessage } = props;
+        if (currentMessage.location) {
+            return (
+                <MapView
+                    style={{
+                        width: 150,
+                        height: 100,
+                        borderRadius: 13,
+                        margin: 3
+                    }}
+                    region={{
+                        latitude: currentMessage.location.latitude,
+                        longitude: currentMessage.location.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
+            );
+        }
+        return null;
+    }
+
     // only render toolbar if online
     const renderInputToolbar = (props) => {
         if (connectStat === false) return;
@@ -236,6 +270,8 @@ export default function Chat(props) {
         return (
             <View style={[styles.container, {backgroundColor: background}]}>
                 <GiftedChat
+                    renderCustomView={renderCustomView}
+                    renderActions={renderCustomActions}
                     renderBubble={renderBubble}
                     renderSystemMessage={renderSystemMessage}
                     renderDay={renderDay}
