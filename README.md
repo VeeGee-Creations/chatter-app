@@ -14,7 +14,6 @@ A react native chat app created using expo
 * @react-native-community/netinfo: 6.0.0
 * @react-navigation/native: ^5.9.4
 * @react-navigation/stack: ^5.14.5
-* cookies: ^0.8.0
 * expo: ~41.0.1
 * expo-image-picker: ~10.1.4
 * expo-location: ~12.0.4
