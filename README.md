@@ -46,7 +46,6 @@ This should print the version number so you’ll see something like this ```v12.
 * [iOS Simulator](https://developer.apple.com/library/archive/documentation/IDEs/Conceptual/iOS_Simulator_Guide/GettingStartedwithiOSSimulator/GettingStartedwithiOSSimulator.html) (only available on mac)
 
 ## To Install Clone
-
 Open the terminal in the project folder and run  
 ```npm install```
 
