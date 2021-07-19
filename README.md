@@ -34,7 +34,7 @@ A react native chat app created using expo
 
 ## Setup
 * Verify Node is installed by typing ```node -v``` in your terminal.  
-This should print the version number so you’ll see something like this ```v0.10.35```
+This should print the version number so you’ll see something like this ```v12.18.1```
   * If the command is unrecognized, download and install node from [nodjs.org](https://nodejs.org/en/download/)
 * Install Expo Command Line  
 ```npm install expo-cli --global```
